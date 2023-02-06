@@ -5,12 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-class Facilities {
-    private int airConditioner;
-    private String heating;
-    private String unfurnished;
+@Data
+public class AvgPriceByCity {
+    private String _id;
+    private int avgPrice;
+
 }

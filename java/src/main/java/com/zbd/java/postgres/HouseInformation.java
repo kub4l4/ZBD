@@ -12,31 +12,31 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "houseInformation")
+@Table(name = "house_information")
 public class HouseInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String houseType;
-    private String balcony;
+    private int balcony;
     private String bathNum;
-    private String builtInWardrobe;
-    private String chimney;
+    private int builtInWardrobe;
+    private int chimney;
     private String floor;
     private String garage;
-    private String garden;
-    private String groundSize;
+    private int garden;
+    private int groundSize;
     private String condition;
-    private String constructDate;
+    private int constructDate;
     private String energeticCertif;
     private String roomNum;
-    private String storageRoom;
-    private String swimmingPool;
-    private String terrace;
+    private int storageRoom;
+    private int swimmingPool;
+    private int terrace;
     private String orientation;
     private String reducedMobility;
-    private String kitchen;
-    private String lift;
+    private int kitchen;
+    private int lift;
     private String obtentionDate;
 
 }

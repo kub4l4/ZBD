@@ -1,12 +1,13 @@
-import pandas as pd
-import glob
-import os
 import csv
+import glob
 import json
+import os
+
+import pandas as pd
 
 
 def prepare_test_csv():
-	# df = pd.read_csv(r'archive\(15).csv')
+	df = pd.read_csv(r'archive\(15).csv')
 	df.to_csv(r'temp.csv')
 
 
@@ -14,21 +15,25 @@ def prepare_prod_csv():
 	joined_files = os.path.join("archive", "*.csv")
 	joined_list = glob.glob(joined_files)
 	df = pd.concat(map(pd.read_csv, joined_list), ignore_index=True)
+	df = df.drop(df[df.balcony == "balcony"].index)
 
-	# df['balcony']=df['balcony'].fillna(0).astype(int)
-	# df['bath_num']=df['bath_num'].fillna(0).astype(int)
-	# df['built_in_wardrobe']=df['built_in_wardrobe'].fillna(0).astype(int)
-	# df['chimney']=df['chimney'].fillna(0).astype(int)
-	# df['air_conditioner']=df['air_conditioner'].fillna(0).astype(int)
-	# df['garden']=df['garden'].fillna(0).astype(int)
-	# df['ground_size']=df['ground_size'].fillna(0).astype(int)
-	# df['construct_date']=df['construct_date'].fillna(0).astype(int)
-	# df['lift']=df['lift'].fillna(0).astype(int)
-	# df['kitchen']=df['kitchen'].fillna(0).astype(int)
-	# df['swimming_pool']=df['swimming_pool'].fillna(0).astype(int)
-	# df['storage_room']=df['storage_room'].fillna(0).astype(int)
-	# df['terrace']=df['terrace'].fillna(0).astype(int)
-	# df['storage_room']=df['storage_room'].fillna(0).astype(int)
+	df['price'] = df['price'].fillna(0).astype(int)
+	df['m2_real'] = df['m2_real'].fillna(0).astype(float).astype(int)
+	df['m2_useful'] = df['m2_useful'].fillna(0).astype(float).astype(int)
+	df['air_conditioner'] = df['air_conditioner'].fillna(0).astype(int)
+	df['balcony'] = df['balcony'].fillna(0).astype(int)
+	df['built_in_wardrobe'] = df['built_in_wardrobe'].fillna(0).astype(int)
+	df['chimney'] = df['chimney'].fillna(0).astype(int)
+	df['garden'] = df['garden'].fillna(0).astype(int)
+	df['ground_size'] = df['ground_size'].fillna(0).astype(int)
+	df['construct_date'] = df['construct_date'].fillna(0).astype(float).astype(int)
+	df['storage_room'] = df['storage_room'].fillna(0).astype(int)
+	df['storage_room'] = df['storage_room'].fillna(0).astype(int)
+	df['terrace'] = df['terrace'].fillna(0).astype(int)
+	df['kitchen'] = df['kitchen'].fillna(0).astype(float).astype(int)
+	df['lift'] = df['lift'].fillna(0).astype(float).astype(int)
+	df['swimming_pool'] = df['swimming_pool'].fillna(0).astype(int)
+
 	df.to_csv(r'temp.csv')
 
 

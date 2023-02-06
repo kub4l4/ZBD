@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "houses")
-public class HomeMongo {
+public class HouseMongo {
 
     @Id
     private String id;
@@ -21,7 +21,7 @@ public class HomeMongo {
     private String adDescription;
     private String adLastUpdate;
     private String houseId;
-    private String price;
+    private int price;
 
     @Embedded
     private HouseInformation houseInformation;

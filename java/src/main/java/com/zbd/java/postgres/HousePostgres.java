@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "houses")
-public class Home {
+public class HousePostgres {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,7 @@ public class Home {
     private String adDescription;
     private String adLastUpdate;
     private String houseId;
-    private String price;
+    private int price;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "house_information_id", referencedColumnName = "id")
     private HouseInformation houseInformation;

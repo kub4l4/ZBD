@@ -14,19 +14,19 @@ import java.util.Map;
 @RequestMapping("/api/measure")
 @Slf4j
 @AllArgsConstructor
-public class HomeControllerMeasure {
+public class HouseControllerMeasure {
 
-    private final HomeService homeService;
+    private final HouseService houseService;
 
     public void prepareDatabase(int uploadLines) throws IOException {
-        homeService.uploadToMongoJSON(uploadLines);
-        homeService.uploadToPostgres(uploadLines);
+        houseService.uploadToMongoJSON(uploadLines);
+        houseService.uploadToPostgres(uploadLines);
 
     }
 
     public void cleanDatabase() {
-        homeService.remove();
-        homeService.removeMongo();
+        houseService.remove();
+        houseService.removeMongo();
     }
 
 
@@ -35,13 +35,13 @@ public class HomeControllerMeasure {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
         long startTime = System.currentTimeMillis();
-        homeService.findAllMongo();
+        houseService.findAllMongo();
         long endTime = System.currentTimeMillis();
-        Long elapsedTime = endTime - startTime;
+        long elapsedTime = endTime - startTime;
         map.put("mongo", elapsedTime);
 
         startTime = System.currentTimeMillis();
-        homeService.findAllPostgres();
+        houseService.findAllPostgres();
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
         map.put("postgres", elapsedTime);
@@ -56,13 +56,13 @@ public class HomeControllerMeasure {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
         long startTime = System.currentTimeMillis();
-        homeService.getHousesByCityMongo(city);
+        houseService.getHousesByCityMongo(city);
         long endTime = System.currentTimeMillis();
-        Long elapsedTime = endTime - startTime;
+        long elapsedTime = endTime - startTime;
         map.put("mongo", elapsedTime);
 
         startTime = System.currentTimeMillis();
-        homeService.getHousesByCity(city);
+        houseService.getHousesByCity(city);
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
         map.put("postgres", elapsedTime);
@@ -76,13 +76,13 @@ public class HomeControllerMeasure {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
         long startTime = System.currentTimeMillis();
-        homeService.HomeMongoByLocationLocCityOrderByPriceMongo(city);
+        houseService.HomeMongoByLocationLocCityOrderByPriceMongo(city);
         long endTime = System.currentTimeMillis();
-        Long elapsedTime = endTime - startTime;
+        long elapsedTime = endTime - startTime;
         map.put("mongo", elapsedTime);
 
         startTime = System.currentTimeMillis();
-        homeService.getByLocationLocCityOrderByPricePostgres(city);
+        houseService.getByLocationLocCityOrderByPricePostgres(city);
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
         map.put("postgres", elapsedTime);
@@ -98,13 +98,13 @@ public class HomeControllerMeasure {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
         long startTime = System.currentTimeMillis();
-        homeService.uploadToMongoJSON(uploadLines);
+        houseService.uploadToMongoJSON(uploadLines);
         long endTime = System.currentTimeMillis();
-        Long elapsedTime = endTime - startTime;
+        long elapsedTime = endTime - startTime;
         map.put("mongo", elapsedTime);
 
         startTime = System.currentTimeMillis();
-        homeService.uploadToPostgres(uploadLines);
+        houseService.uploadToPostgres(uploadLines);
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
         map.put("postgres", elapsedTime);
@@ -119,13 +119,13 @@ public class HomeControllerMeasure {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
         long startTime = System.currentTimeMillis();
-        homeService.removeFirstItemsMongo(deleteLines);
+        houseService.removeFirstItemsMongo(deleteLines);
         long endTime = System.currentTimeMillis();
-        Long elapsedTime = endTime - startTime;
+        long elapsedTime = endTime - startTime;
         map.put("mongo", elapsedTime);
 
         startTime = System.currentTimeMillis();
-        homeService.removeFirstItems(deleteLines);
+        houseService.removeFirstItems(deleteLines);
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
         map.put("postgres", elapsedTime);
@@ -139,13 +139,35 @@ public class HomeControllerMeasure {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
         long startTime = System.currentTimeMillis();
-        homeService.removeByCityMongo(city);
+        houseService.removeByCityMongo(city);
         long endTime = System.currentTimeMillis();
-        Long elapsedTime = endTime - startTime;
+        long elapsedTime = endTime - startTime;
         map.put("mongo", elapsedTime);
 
         startTime = System.currentTimeMillis();
-        homeService.removeByCity(city);
+        houseService.removeByCity(city);
+        endTime = System.currentTimeMillis();
+        elapsedTime = endTime - startTime;
+        map.put("postgres", elapsedTime);
+
+        cleanDatabase();
+        return ResponseEntity.ok().body(map);
+
+    }
+
+
+    @GetMapping("/avg-price-by-city")
+    public ResponseEntity<Map<String, Long>> getAvgPriceByCity(@RequestParam("uploadLines") int uploadLines) throws IOException {
+        prepareDatabase(uploadLines);
+        HashMap<String, Long> map = new HashMap<>();
+        long startTime = System.currentTimeMillis();
+        houseService.getAvgPriceByCityMongo();
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
+        map.put("mongo", elapsedTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getAvgPriceByCityPostgres();
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
         map.put("postgres", elapsedTime);
