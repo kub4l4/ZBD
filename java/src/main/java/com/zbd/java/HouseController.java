@@ -4,7 +4,6 @@ import com.zbd.java.mongo.AvgPriceByCity;
 import com.zbd.java.mongo.HouseMongo;
 import com.zbd.java.postgres.HousePostgres;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/home")
-@Slf4j
 @AllArgsConstructor
 public class HouseController {
 

@@ -1,7 +1,5 @@
 package com.zbd.java;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,16 +10,19 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/measure")
-@Slf4j
-@AllArgsConstructor
 public class HouseControllerMeasure {
 
     private final HouseService houseService;
+    private long startTime;
+    private long endTime;
+
+    public HouseControllerMeasure(HouseService houseService) {
+        this.houseService = houseService;
+    }
 
     public void prepareDatabase(int uploadLines) throws IOException {
         houseService.uploadToMongoJSON(uploadLines);
         houseService.uploadToPostgres(uploadLines);
-
     }
 
     public void cleanDatabase() {
@@ -34,17 +35,15 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> getAllHouses(@RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         houseService.findAllMongo();
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.findAllPostgres();
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);
@@ -55,17 +54,15 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> getHousesByCity(@RequestParam("city") String city, @RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         houseService.getHousesByCityMongo(city);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.getHousesByCity(city);
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);
@@ -75,21 +72,18 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> getByLocationLocCityOrderByPrice(@RequestParam("city") String city, @RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         houseService.HomeMongoByLocationLocCityOrderByPriceMongo(city);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.getByLocationLocCityOrderByPricePostgres(city);
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);
-
     }
 
 
@@ -97,17 +91,15 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> uploadFromJSON(@RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         houseService.uploadToMongoJSON(uploadLines);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.uploadToPostgres(uploadLines);
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);
@@ -118,17 +110,15 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> removeFirstItems(@RequestParam("deleteLines") int deleteLines, @RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         houseService.removeFirstItemsMongo(deleteLines);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.removeFirstItems(deleteLines);
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);
@@ -138,17 +128,15 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> removeByCity(@RequestParam("city") String city, @RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         houseService.removeByCityMongo(city);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.removeByCity(city);
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);
@@ -160,17 +148,16 @@ public class HouseControllerMeasure {
     public ResponseEntity<Map<String, Long>> getAvgPriceByCity(@RequestParam("uploadLines") int uploadLines) throws IOException {
         prepareDatabase(uploadLines);
         HashMap<String, Long> map = new HashMap<>();
-        long startTime = System.currentTimeMillis();
+
+        startTime = System.currentTimeMillis();
         houseService.getAvgPriceByCityMongo();
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        map.put("mongo", elapsedTime);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
 
         startTime = System.currentTimeMillis();
         houseService.getAvgPriceByCityPostgres();
         endTime = System.currentTimeMillis();
-        elapsedTime = endTime - startTime;
-        map.put("postgres", elapsedTime);
+        map.put("postgres", endTime - startTime);
 
         cleanDatabase();
         return ResponseEntity.ok().body(map);

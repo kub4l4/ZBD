@@ -19,17 +19,15 @@ import java.util.List;
 @Service
 public class HouseService {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     private final HousePostgresRepository housePostgresRepository;
     private final HouseMongoRepository houseMongoRepository;
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Autowired
     public HouseService(HousePostgresRepository housePostgresRepository, HouseMongoRepository houseMongoRepository) {
         this.housePostgresRepository = housePostgresRepository;
         this.houseMongoRepository = houseMongoRepository;
     }
-
 
     public HousePostgres createHome(HousePostgres housePostgres) {
         return housePostgresRepository.save(housePostgres);
@@ -72,7 +70,6 @@ public class HouseService {
         br.close();
         housePostgresRepository.saveAll(items);
     }
-
 
     public void removeFirstItems(int number) {
         List<HousePostgres> items = housePostgresRepository.findAll();
