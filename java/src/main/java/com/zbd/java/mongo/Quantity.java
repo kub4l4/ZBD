@@ -1,14 +1,16 @@
 package com.zbd.java.mongo;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
 class Quantity {
-    private String m2_real;
-    private String m2_useful;
+    private String m2Real;
+    private String m2Useful;
 }
 

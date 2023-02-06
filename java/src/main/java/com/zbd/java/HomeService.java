@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +46,9 @@ public class HomeService {
     }
 
     public BufferedReader getJSON() throws FileNotFoundException {
-    String path = "C:\\Users\\Kamil K\\Documents\\repo\\ZBD\\python\\houses.json";
-    String filePath = path.replace("\\", "/");
-    return new BufferedReader(new FileReader(filePath));
+        String path = "C:\\Users\\Kamil K\\Documents\\repo\\ZBD\\python\\houses.json";
+        String filePath = path.replace("\\", "/");
+        return new BufferedReader(new FileReader(filePath));
     }
 
     public void uploadToMongoJSON(int uploadLines) throws IOException {
@@ -62,7 +65,7 @@ public class HomeService {
         homeMongoRepository.saveAll(items);
     }
 
-    public void uploadItemsFromJSON2(int uploadLines) throws IOException {
+    public void uploadToPostgres(int uploadLines) throws IOException {
         List<Home> items = new ArrayList<>();
         BufferedReader br = getJSON();
         String line;
@@ -77,6 +80,51 @@ public class HomeService {
     }
 
 
+    public void removeFirstItems(int number) {
+        List<Home> items = homeRepository.findAll();
+        int count = 0;
+        for (Home item : items) {
+            homeRepository.delete(item);
+            count++;
+            if (count >= number) {
+                break;
+            }
+        }
+    }
+
+    public void removeFirstItemsMongo(int number) {
+        List<HomeMongo> items = homeMongoRepository.findAll();
+        int count = 0;
+        for (HomeMongo item : items) {
+            homeMongoRepository.delete(item);
+            count++;
+            if (count >= number) {
+                break;
+            }
+        }
+    }
+
+
+    public void remove() {
+        List<Home> items = homeRepository.findAll();
+        homeRepository.deleteAll(items);
+    }
+
+    public void removeMongo() {
+        List<HomeMongo> items = homeMongoRepository.findAll();
+        homeMongoRepository.deleteAll(items);
+    }
+
+    public void removeByCity(String city) {
+        List<Home> items = homeRepository.findByLocationLocCity(city);
+        homeRepository.deleteAll(items);
+    }
+
+    public void removeByCityMongo(String city) {
+        List<HomeMongo> items = homeMongoRepository.findByLocationLocCity(city);
+        homeMongoRepository.deleteAll(items);
+    }
+
     public List<Home> findAllPostgres() {
         return homeRepository.findAll();
     }
@@ -85,5 +133,20 @@ public class HomeService {
         return homeMongoRepository.findAll();
     }
 
+    public List<Home> getHousesByCity(String city) {
+        return homeRepository.findByLocationLocCity(city);
+    }
+
+    public List<HomeMongo> getHousesByCityMongo(String city) {
+        return homeMongoRepository.findByLocationLocCity(city);
+    }
+
+    public List<Home> getByLocationLocCityOrderByPricePostgres(String city) {
+        return homeRepository.findByLocationLocCityOrderByPrice(city);
+    }
+
+    public List<HomeMongo> HomeMongoByLocationLocCityOrderByPriceMongo(String city) {
+        return homeMongoRepository.findByLocationLocCityOrderByPrice(city);
+    }
 
 }

@@ -16,18 +16,22 @@ public class Home {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition="TEXT")
-    private String ad_description;
-    private String ad_last_update;
-    private String house_id;
+    @Column(columnDefinition = "TEXT")
+    private String adDescription;
+    private String adLastUpdate;
+    private String houseId;
     private String price;
     @OneToOne(cascade = CascadeType.ALL)
-    private HouseInformation house_information;
+    @JoinColumn(name = "house_information_id", referencedColumnName = "id")
+    private HouseInformation houseInformation;
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "facilities_id", referencedColumnName = "id")
     private Facilities facilities;
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "quantity_id", referencedColumnName = "id")
     private Quantity quantity;
 
 }

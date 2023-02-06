@@ -18,6 +18,36 @@ public class HomeController {
 
     private final HomeService homeService;
 
+    @GetMapping("/mongo")
+    public ResponseEntity<List<HomeMongo>> getAllHousesMongo() {
+        return ResponseEntity.ok().body(homeService.findAllMongo());
+    }
+
+    @GetMapping("/postgres")
+    public ResponseEntity<List<Home>> getAllHousesPostgres() {
+        return ResponseEntity.ok().body(homeService.findAllPostgres());
+    }
+
+    @GetMapping("/postgres/city")
+    public List<Home> getHousesByCityPostgres(@RequestParam("city") String city) {
+        return homeService.getHousesByCity(city);
+    }
+
+    @GetMapping("/mongo/city")
+    public List<HomeMongo> getHousesByCityMongo(@RequestParam("city") String city) {
+        return homeService.getHousesByCityMongo(city);
+    }
+
+    @GetMapping("/postgres/cityAndSort")
+    public List<Home> getByLocationLocCityOrderByPricePostgres(@RequestParam("city") String city) {
+        return homeService.getByLocationLocCityOrderByPricePostgres(city);
+    }
+
+    @GetMapping("/mongo/cityAndSort")
+    public List<HomeMongo> HomeMongoByLocationLocCityOrderByPriceMongo(@RequestParam("city") String city) {
+        return homeService.HomeMongoByLocationLocCityOrderByPriceMongo(city);
+    }
+
     @PostMapping("/postgres")
     public Home createHome(@RequestBody Home home) {
         return homeService.createHome(home);
@@ -28,29 +58,46 @@ public class HomeController {
         return homeService.createHomeMongo(homeMongo);
     }
 
-//    @GetMapping("/mongo")
-//    public List<HomeMongo> getHomeMongo() {
-//        return homeService.getHomeMongo();
-//    }
-
-    @PostMapping("/mongo/json/{uploadLines}")
-    public void uploadToMongoJSON(@PathVariable("uploadLines") Integer uploadLines) throws IOException {
+    @PostMapping("/mongo/json")
+    public void uploadToMongoJSON(@RequestParam("uploadLines") int uploadLines) throws IOException {
         homeService.uploadToMongoJSON(uploadLines);
     }
 
-    @PostMapping("/postgres/json/{uploadLines}")
-    public void uploadItemsFromJSON2(@PathVariable("uploadLines") Integer uploadLines) throws IOException {
-        homeService.uploadItemsFromJSON2(uploadLines);
+    @PostMapping("/postgres/json")
+    public void uploadToPostgres(@RequestParam("uploadLines") int uploadLines) throws IOException {
+        homeService.uploadToPostgres(uploadLines);
     }
 
-    @GetMapping("/mongo")
-    public ResponseEntity<List<HomeMongo>> getHousesMongo() {
-        return ResponseEntity.ok().body(homeService.findAllMongo());
+    @DeleteMapping("/postgres/lines")
+    public void removeFirstItems(@RequestParam("deleteLines") int deleteLines) {
+        homeService.removeFirstItems(deleteLines);
     }
 
-    @GetMapping("/postgres")
-    public ResponseEntity<List<Home>> getHousesPostgres() {
-        return ResponseEntity.ok().body(homeService.findAllPostgres());
+    @DeleteMapping("/mongo/lines")
+    public void removeFirstItemsMongo(@RequestParam("deleteLines") int deleteLines) {
+        homeService.removeFirstItemsMongo(deleteLines);
     }
+
+    @DeleteMapping("/postgres/city")
+    public void removeByCity(@RequestParam("city") String city) {
+        homeService.removeByCity(city);
+    }
+
+    @DeleteMapping("/mongo/city")
+    public void removeByCityItemsMongo(@RequestParam("city") String city) {
+        homeService.removeByCityMongo(city);
+    }
+
+
+    @DeleteMapping("/postgres")
+    public void removeByCity() {
+        homeService.remove();
+    }
+
+    @DeleteMapping("/mongo")
+    public void removeMongo() {
+        homeService.removeMongo();
+    }
+
 
 }

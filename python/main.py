@@ -37,64 +37,64 @@ def create_nesting():
 	with open('temp.csv', "r", encoding="utf-8") as csv_file:
 		for ad in csv.DictReader(csv_file):
 			house_information = {
-				'house_type': ad['house_type'],
+				'houseType': ad['house_type'],
 				'balcony': ad['balcony'],
-				'bath_num': ad['bath_num'],
-				'built_in_wardrobe': ad['built_in_wardrobe'],
+				'bathNum': ad['bath_num'],
+				'builtInWardrobe': ad['built_in_wardrobe'],
 				'chimney': ad['chimney'],
 				'floor': ad['floor'],
 				'garage': ad['garage'],
 				'garden': ad['garden'],
-				'ground_size': ad['ground_size'],
+				'groundSize': ad['ground_size'],
 				'condition': ad['condition'],
-				'construct_date': ad['construct_date'],
-				'energetic_certif': ad['energetic_certif'],
-				'room_num': ad['room_num'],
-				'storage_room': ad['storage_room'],
-				'swimming_pool': ad['swimming_pool'],
+				'constructDate': ad['construct_date'],
+				'energeticCertif': ad['energetic_certif'],
+				'roomNum': ad['room_num'],
+				'storageRoom': ad['storage_room'],
+				'swimmingPool': ad['swimming_pool'],
 				'terrace': ad['terrace'],
 				'orientation': ad['orientation'],
-				'reduced_mobility': ad['reduced_mobility'],
+				'reducedMobility': ad['reduced_mobility'],
 				'kitchen': ad['kitchen'],
 				'lift': ad['lift'],
-				'obtention_date': ad['obtention_date'],
+				'obtentionDate': ad['obtention_date'],
 			}
 			facilities = {
-				'air_conditioner': ad['air_conditioner'],
+				'airConditioner': ad['air_conditioner'],
 				'heating': ad['heating'],
 				'unfurnished': ad['unfurnished'],
 			}
 			location = {
-				'loc_city': ad['loc_city'],
-				'loc_district': ad['loc_district'],
-				'loc_full': ad['loc_full'],
-				'loc_neigh': ad['loc_neigh'],
-				'loc_street': ad['loc_street'],
-				'loc_zone': ad['loc_zone'],
+				'locCity': ad['loc_city'],
+				'locDistrict': ad['loc_district'],
+				'locFull': ad['loc_full'],
+				'locNeigh': ad['loc_neigh'],
+				'locStreet': ad['loc_street'],
+				'locZone': ad['loc_zone'],
 			}
 			quantity = {
-				'm2_real': ad['m2_real'],
-				'm2_useful': ad['m2_useful'],
+				'm2Real': ad['m2_real'],
+				'm2Useful': ad['m2_useful'],
 			}
 
 			output.append({
-				'ad_description': ad['ad_description'],
-				'ad_last_update': ad['ad_last_update'],
-				'house_id': ad['house_id'],
+				'adDescription': ad['ad_description'],
+				'adLastUpdate': ad['ad_last_update'],
+				'houseId': ad['house_id'],
 				'price': ad['price'],
-				'house_information': house_information,
+				'houseInformation': house_information,
 				'facilities': facilities,
 				'location': location,
 				'quantity': quantity
 			})
 
 		output_json = json.dumps(output)
-	with open('json_data1.json', 'w') as outfile:
+	with open('temp.json', 'w') as outfile:
 		outfile.write(output_json)
 
 
 def test():
-	df = pd.read_json('json_data1.json')
+	df = pd.read_json('temp.json')
 	df.to_json(r'houses.json', orient='records', lines=True)
 
 

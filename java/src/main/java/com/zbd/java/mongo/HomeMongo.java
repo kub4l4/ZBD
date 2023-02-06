@@ -1,7 +1,6 @@
 package com.zbd.java.mongo;
 
 import jakarta.persistence.Embedded;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +18,13 @@ public class HomeMongo {
     @Id
     private String id;
 
-    private String ad_description;
-    private String ad_last_update;
-    private String house_id;
+    private String adDescription;
+    private String adLastUpdate;
+    private String houseId;
     private String price;
 
     @Embedded
-    private HouseInformation house_information;
+    private HouseInformation houseInformation;
 
     @Embedded
     private Facilities facilities;

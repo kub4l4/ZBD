@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 class Facilities {
-    private String air_conditioner;
+    private String airConditioner;
     private String heating;
     private String unfurnished;
 }

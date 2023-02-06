@@ -16,7 +16,7 @@ public class Quantity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String m2_real;
-    private String m2_useful;
+    private String m2Real;
+    private String m2Useful;
 
 }

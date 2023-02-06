@@ -16,7 +16,7 @@ public class Facilities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String air_conditioner;
+    private String airConditioner;
     private String heating;
     private String unfurnished;
 
