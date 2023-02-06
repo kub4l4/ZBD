@@ -163,4 +163,44 @@ public class HouseControllerMeasure {
         return ResponseEntity.ok().body(map);
 
     }
+
+    @PutMapping("/updateAdDescription")
+    public ResponseEntity<Map<String, Long>> updateAdDescription(@RequestParam("uploadLines") int uploadLines) throws IOException {
+        prepareDatabase(uploadLines);
+        HashMap<String, Long> map = new HashMap<>();
+
+        startTime = System.currentTimeMillis();
+        houseService.updateAdDescriptionMongo();
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.updateAdDescriptionPostgres();
+        endTime = System.currentTimeMillis();
+        map.put("postgres", endTime - startTime);
+
+        cleanDatabase();
+        return ResponseEntity.ok().body(map);
+
+    }
+
+    @PutMapping("/updateAdDescriptionCity")
+    public ResponseEntity<Map<String, Long>> updateAdDescriptionWhereCity(@RequestParam("city") String city, @RequestParam("uploadLines") int uploadLines) throws IOException {
+        prepareDatabase(uploadLines);
+        HashMap<String, Long> map = new HashMap<>();
+
+        startTime = System.currentTimeMillis();
+        houseService.updateAdDescriptionWhereCityMongo(city);
+        endTime = System.currentTimeMillis();
+        map.put("mongo", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.updateAdDescriptionWhereCityPostgres(city);
+        endTime = System.currentTimeMillis();
+        map.put("postgres", endTime - startTime);
+
+        cleanDatabase();
+        return ResponseEntity.ok().body(map);
+
+    }
 }

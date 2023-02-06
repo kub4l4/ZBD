@@ -148,4 +148,50 @@ public class HouseService {
         return housePostgresRepository.getAvgPriceByCityPostgres();
     }
 
+
+    public void updateAdDescriptionMongo() {
+        List<HouseMongo> houses = houseMongoRepository.findAll();
+        for (HouseMongo house : houses) {
+            house.setAdDescription("""
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla blandit nisl elit, id commodo ex pellentesque mattis. Donec eleifend lectus et eros tincidunt, sit amet iaculis massa aliquet. Integer sodales dolor nec nunc bibendum finibus. Fusce aliquet, enim at tincidunt imperdiet, augue libero accumsan leo, congue bibendum risus leo a enim. Suspendisse facilisis tellus tortor, non rhoncus turpis venenatis nec. Aliquam nec interdum turpis. Curabitur pulvinar lacus ligula, quis posuere nulla sagittis nec. Integer nibh magna, condimentum sed consectetur nec, fringilla id lacus. Suspendisse potenti. Nam a tincidunt libero, sit amet iaculis mi. Proin libero elit, aliquet eget enim ut, mollis tempus mauris. In non libero magna. In porttitor nulla quam, eget pharetra enim varius eu. Maecenas volutpat ex orci, quis hendrerit sem mattis ut. Proin orci nibh, pharetra ut hendrerit hendrerit, cursus vel justo. In placerat tellus et pharetra tristique.
+
+                Phasellus tincidunt id leo id varius. Vivamus iaculis quis lacus sit amet tempor. Donec dictum, massa ut venenatis scelerisque, ex magna ullamcorper ante, in aliquet est velit consequat urna. Duis laoreet augue risus, placerat imperdiet dolor pharetra eget. Sed scelerisque felis et massa iaculis hendrerit. Sed nec molestie est. Sed efficitur est a nibh convallis feugiat. Aenean et nisl efficitur, bibendum ex in, dictum leo. Integer urna nunc, lacinia at pulvinar quis, aliquet sed neque. Cras est odio, rutrum sit amet ante sit amet, viverra pulvinar neque. Integer semper, nisl in viverra sagittis, dolor leo tempor sem, non porta ex nunc eget urna.""");
+            houseMongoRepository.save(house);
+        }
+    }
+
+    public void updateAdDescriptionPostgres() {
+        List<HousePostgres> houses = housePostgresRepository.findAll();
+        for (HousePostgres house : houses) {
+            house.setAdDescription("""
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla blandit nisl elit, id commodo ex pellentesque mattis. Donec eleifend lectus et eros tincidunt, sit amet iaculis massa aliquet. Integer sodales dolor nec nunc bibendum finibus. Fusce aliquet, enim at tincidunt imperdiet, augue libero accumsan leo, congue bibendum risus leo a enim. Suspendisse facilisis tellus tortor, non rhoncus turpis venenatis nec. Aliquam nec interdum turpis. Curabitur pulvinar lacus ligula, quis posuere nulla sagittis nec. Integer nibh magna, condimentum sed consectetur nec, fringilla id lacus. Suspendisse potenti. Nam a tincidunt libero, sit amet iaculis mi. Proin libero elit, aliquet eget enim ut, mollis tempus mauris. In non libero magna. In porttitor nulla quam, eget pharetra enim varius eu. Maecenas volutpat ex orci, quis hendrerit sem mattis ut. Proin orci nibh, pharetra ut hendrerit hendrerit, cursus vel justo. In placerat tellus et pharetra tristique.
+
+                Phasellus tincidunt id leo id varius. Vivamus iaculis quis lacus sit amet tempor. Donec dictum, massa ut venenatis scelerisque, ex magna ullamcorper ante, in aliquet est velit consequat urna. Duis laoreet augue risus, placerat imperdiet dolor pharetra eget. Sed scelerisque felis et massa iaculis hendrerit. Sed nec molestie est. Sed efficitur est a nibh convallis feugiat. Aenean et nisl efficitur, bibendum ex in, dictum leo. Integer urna nunc, lacinia at pulvinar quis, aliquet sed neque. Cras est odio, rutrum sit amet ante sit amet, viverra pulvinar neque. Integer semper, nisl in viverra sagittis, dolor leo tempor sem, non porta ex nunc eget urna.""");
+            housePostgresRepository.save(house);
+        }
+    }
+
+    public void updateAdDescriptionWhereCityMongo(String city) {
+        List<HouseMongo> houses = houseMongoRepository.findByLocationLocCity(city);
+        for (HouseMongo house : houses) {
+            house.setAdDescription("""
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla blandit nisl elit, id commodo ex pellentesque mattis. Donec eleifend lectus et eros tincidunt, sit amet iaculis massa aliquet. Integer sodales dolor nec nunc bibendum finibus. Fusce aliquet, enim at tincidunt imperdiet, augue libero accumsan leo, congue bibendum risus leo a enim. Suspendisse facilisis tellus tortor, non rhoncus turpis venenatis nec. Aliquam nec interdum turpis. Curabitur pulvinar lacus ligula, quis posuere nulla sagittis nec. Integer nibh magna, condimentum sed consectetur nec, fringilla id lacus. Suspendisse potenti. Nam a tincidunt libero, sit amet iaculis mi. Proin libero elit, aliquet eget enim ut, mollis tempus mauris. In non libero magna. In porttitor nulla quam, eget pharetra enim varius eu. Maecenas volutpat ex orci, quis hendrerit sem mattis ut. Proin orci nibh, pharetra ut hendrerit hendrerit, cursus vel justo. In placerat tellus et pharetra tristique.
+
+                Phasellus tincidunt id leo id varius. Vivamus iaculis quis lacus sit amet tempor. Donec dictum, massa ut venenatis scelerisque, ex magna ullamcorper ante, in aliquet est velit consequat urna. Duis laoreet augue risus, placerat imperdiet dolor pharetra eget. Sed scelerisque felis et massa iaculis hendrerit. Sed nec molestie est. Sed efficitur est a nibh convallis feugiat. Aenean et nisl efficitur, bibendum ex in, dictum leo. Integer urna nunc, lacinia at pulvinar quis, aliquet sed neque. Cras est odio, rutrum sit amet ante sit amet, viverra pulvinar neque. Integer semper, nisl in viverra sagittis, dolor leo tempor sem, non porta ex nunc eget urna.""");
+            houseMongoRepository.save(house);
+        }
+    }
+
+    public void updateAdDescriptionWhereCityPostgres(String city) {
+        List<HousePostgres> houses = housePostgresRepository.findByLocationLocCity(city);
+        for (HousePostgres house : houses) {
+            house.setAdDescription("""
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla blandit nisl elit, id commodo ex pellentesque mattis. Donec eleifend lectus et eros tincidunt, sit amet iaculis massa aliquet. Integer sodales dolor nec nunc bibendum finibus. Fusce aliquet, enim at tincidunt imperdiet, augue libero accumsan leo, congue bibendum risus leo a enim. Suspendisse facilisis tellus tortor, non rhoncus turpis venenatis nec. Aliquam nec interdum turpis. Curabitur pulvinar lacus ligula, quis posuere nulla sagittis nec. Integer nibh magna, condimentum sed consectetur nec, fringilla id lacus. Suspendisse potenti. Nam a tincidunt libero, sit amet iaculis mi. Proin libero elit, aliquet eget enim ut, mollis tempus mauris. In non libero magna. In porttitor nulla quam, eget pharetra enim varius eu. Maecenas volutpat ex orci, quis hendrerit sem mattis ut. Proin orci nibh, pharetra ut hendrerit hendrerit, cursus vel justo. In placerat tellus et pharetra tristique.
+
+                Phasellus tincidunt id leo id varius. Vivamus iaculis quis lacus sit amet tempor. Donec dictum, massa ut venenatis scelerisque, ex magna ullamcorper ante, in aliquet est velit consequat urna. Duis laoreet augue risus, placerat imperdiet dolor pharetra eget. Sed scelerisque felis et massa iaculis hendrerit. Sed nec molestie est. Sed efficitur est a nibh convallis feugiat. Aenean et nisl efficitur, bibendum ex in, dictum leo. Integer urna nunc, lacinia at pulvinar quis, aliquet sed neque. Cras est odio, rutrum sit amet ante sit amet, viverra pulvinar neque. Integer semper, nisl in viverra sagittis, dolor leo tempor sem, non porta ex nunc eget urna.""");
+            housePostgresRepository.save(house);
+        }
+    }
+
+
 }

@@ -14,3 +14,13 @@ public interface HousePostgresRepository extends JpaRepository<HousePostgres, Lo
     @Query("SELECT h.location.locCity, AVG(h.price) FROM HousePostgres h GROUP BY h.location.locCity")
     List<Object[]> getAvgPriceByCityPostgres();
 }
+//    @Autowired
+//    private MongoTemplate mongoTemplate;
+//
+//    public void updateAdDescription() {
+//        Query query = new Query();
+//        query.limit(100);
+//        Update update = new Update();
+//        update.set("adDescription", "Lorem Impusm");
+//        mongoTemplate.updateMulti(query, update, "property");
+//    }

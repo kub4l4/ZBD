@@ -12,6 +12,7 @@ public interface HouseMongoRepository extends MongoRepository<HouseMongo, String
 
     List<HouseMongo> findByLocationLocCityOrderByPrice(String locCity);
 
+
     @Aggregation("{ $group: { _id: '$location.locCity', avgPrice: { $avg: '$price' } } }")
     List<AvgPriceByCity> getAvgPriceByCityMongo();
 }

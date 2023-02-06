@@ -109,4 +109,28 @@ public class HouseController {
         return houseService.getAvgPriceByCityPostgres();
     }
 
+    @PutMapping("/mongo/updateAdDescription")
+    public ResponseEntity<String> updateAdDescriptionMongo() {
+        houseService.updateAdDescriptionMongo();
+        return ResponseEntity.ok("Ad descriptions updated");
+    }
+
+    @PutMapping("/postgres/updateAdDescription")
+    public ResponseEntity<String> updateAdDescriptionPostgres() {
+        houseService.updateAdDescriptionPostgres();
+        return ResponseEntity.ok("Ad descriptions updated");
+    }
+
+    @PutMapping("/mongo/updateAdDescriptionCity")
+    public ResponseEntity<String> updateAdDescriptionWhereCityMongo(@RequestParam("city") String city) {
+        houseService.updateAdDescriptionWhereCityMongo(city);
+        return ResponseEntity.ok("Ad descriptions updated");
+    }
+
+    @PutMapping("/postgres/updateAdDescriptionCity")
+    public ResponseEntity<String> updateAdDescriptionWhereCityPostgres(@RequestParam("city") String city) {
+        houseService.updateAdDescriptionWhereCityPostgres(city);
+        return ResponseEntity.ok("Ad descriptions updated");
+    }
+
 }
