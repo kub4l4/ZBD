@@ -34,7 +34,7 @@ export class Endpoints extends ApiConnector {
 		return this.post<ExecutionTimeDto>(uri);
 	};
 	public readonly deleteSimple = (quantity: number): Observable<ExecutionTimeDto> => {
-		const uri = `${this.url}lines?uploadLines=${quantity}&deleteLines=${quantity}`;
+		const uri = `${this.url}/lines?uploadLines=${quantity}&deleteLines=${quantity}`;
 		return this.delete<ExecutionTimeDto>(uri);
 	};
 	public readonly deleteCondition = (quantity: number): Observable<ExecutionTimeDto> => {

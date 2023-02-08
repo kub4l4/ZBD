@@ -61,7 +61,7 @@ function App() {
 
 						});
 					} else {
-					database.getSimple(Number(operationQuantity)).pipe(takeUntil(timer$)).subscribe((result) => {
+					database.deleteCondition(Number(operationQuantity)).pipe(takeUntil(timer$)).subscribe((result) => {
 						onSuccess(result)
 
 					});}
