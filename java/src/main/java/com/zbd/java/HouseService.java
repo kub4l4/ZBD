@@ -38,7 +38,7 @@ public class HouseService {
     }
 
     public BufferedReader getJSON() throws FileNotFoundException {
-        String path = "C:\\Users\\Kamil K\\Documents\\repo\\ZBD\\python\\houses.json";
+        String path = "C:\\Users\\macie\\Documents\\GitHub\\ZBD\\python\\houses.json";
         String filePath = path.replace("\\", "/");
         return new BufferedReader(new FileReader(filePath));
     }

@@ -3,9 +3,10 @@ import React from "react";
 
 export interface MaterialButtonProps {
     onPress: () => any;
+		loading: boolean;
 }
 
-const MaterialButton = ({onPress}: MaterialButtonProps) => (
-    <Button variant={"contained"} color={"primary"} onClick={onPress} className="button">Wykonaj</Button>);
+const MaterialButton = ({onPress, loading}: MaterialButtonProps) => (
+    <Button variant={"contained"} color={"primary"} disabled={loading} onClick={onPress} className="button">Wykonaj</Button>);
 
 export default MaterialButton;

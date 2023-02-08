@@ -5,10 +5,10 @@ export const getTextsByType = (radioType: RadioType) => {
         case RadioType.OPERATION:
             return ["Pobieranie Danych", "Dodawanie Rekordów", "Aktualizowanie Rekordów", "Usuwanie Rekordów"]
         case RadioType.TYPE:
-            return ["Brak dodatkowych kryteriów", "Proste kryterium selekcji", "Grupowanie", "Sortowanie"]
+            return ["Brak dodatkowych kryteriów", "Prosta selekcja", "Grupowanie z prostą selekcją", "Sortowanie"]
         case RadioType.QUANTITY:
         default:
-            return ["10", "100", "1000", "10000"]
+            return ["100", "1000", "5000", "15000"]
 
     }
 }

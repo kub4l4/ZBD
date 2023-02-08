@@ -30,7 +30,11 @@
 .result {
     margin-top: 3vh;
     color: black;
-    align-self: center;
+}
+.result-cards {
+    display: flex;
+    flex-direction: row;
+	justify-content: space-between;
 }
 
 .radios {

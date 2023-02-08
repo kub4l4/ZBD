@@ -13,6 +13,9 @@ target/
 .springBeans
 .sts4-cache
 
+react/node_modules/
+react/node_modules/.cache/.eslintcache
+react/node_modules/.cache/default-development
 ### IntelliJ IDEA ###
 .idea
 *.iws
