@@ -38,3 +38,4 @@ build/
 
 /postgres/
 /mongodb/
+/react/node_modules/
