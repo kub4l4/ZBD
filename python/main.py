@@ -11,11 +11,18 @@ def prepare_test_csv():
 	df.to_csv(r'temp.csv')
 
 
+def longest_string(column):
+	column = column.astype(str)
+	return column.str.len().max()
+
+
 def prepare_prod_csv():
 	joined_files = os.path.join("archive", "*.csv")
 	joined_list = glob.glob(joined_files)
 	df = pd.concat(map(pd.read_csv, joined_list), ignore_index=True)
 	df = df.drop(df[df.balcony == "balcony"].index)
+	longest_strings = df.apply(longest_string)
+	print(longest_strings)
 
 	df['price'] = df['price'].fillna(0).astype(int)
 	df['m2_real'] = df['m2_real'].fillna(0).astype(float).astype(int)
@@ -33,6 +40,7 @@ def prepare_prod_csv():
 	df['kitchen'] = df['kitchen'].fillna(0).astype(float).astype(int)
 	df['lift'] = df['lift'].fillna(0).astype(float).astype(int)
 	df['swimming_pool'] = df['swimming_pool'].fillna(0).astype(int)
+
 
 	df.to_csv(r'temp.csv')
 

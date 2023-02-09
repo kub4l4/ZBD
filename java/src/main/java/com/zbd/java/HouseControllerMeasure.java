@@ -21,6 +21,7 @@ public class HouseControllerMeasure {
     }
 
     public void prepareDatabase(int uploadLines) throws IOException {
+        cleanDatabase();
         houseService.uploadToMongoJSON(uploadLines);
         houseService.uploadToPostgres(uploadLines);
     }
@@ -30,6 +31,72 @@ public class HouseControllerMeasure {
         houseService.removeMongo();
     }
 
+    @GetMapping("/test1")
+    public ResponseEntity<Map<String, Long>> getTest1(@RequestParam("city") String city, @RequestParam("uploadLines") int uploadLines) throws IOException {
+        cleanDatabase();
+        HashMap<String, Long> map = new HashMap<>();
+
+        startTime = System.currentTimeMillis();
+        houseService.uploadToMongoJSON(uploadLines);
+        endTime = System.currentTimeMillis();
+        map.put("mongo - POST", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.uploadToPostgres(uploadLines);
+        endTime = System.currentTimeMillis();
+        map.put("postgres - POST", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getHousesByCityMongo(city);
+        endTime = System.currentTimeMillis();
+        map.put("mongo - getAllHouses", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getHousesByCity(city);
+        endTime = System.currentTimeMillis();
+        map.put("postgres - getAllHouses", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getHousesByCityMongo(city);
+        endTime = System.currentTimeMillis();
+        map.put("mongo - getHousesByCity", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getHousesByCity(city);
+        endTime = System.currentTimeMillis();
+        map.put("postgres - getHousesByCity", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.HomeMongoByLocationLocCityOrderByPriceMongo(city);
+        endTime = System.currentTimeMillis();
+        map.put("mongo - getByLocationLocCityOrderByPrice", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getByLocationLocCityOrderByPricePostgres(city);
+        endTime = System.currentTimeMillis();
+        map.put("postgres - getByLocationLocCityOrderByPrice", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getAvgPriceByCityMongo();
+        endTime = System.currentTimeMillis();
+        map.put("mongo - getAvgPriceByCity", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.getAvgPriceByCityPostgres();
+        endTime = System.currentTimeMillis();
+        map.put("postgres - getAvgPriceByCity", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.removeByCityMongo(city);
+        endTime = System.currentTimeMillis();
+        map.put("mongo - delete all", endTime - startTime);
+
+        startTime = System.currentTimeMillis();
+        houseService.removeByCity(city);
+        endTime = System.currentTimeMillis();
+        map.put("postgres - delete all", endTime - startTime);
+        return ResponseEntity.ok().body(map);
+    }
 
     @GetMapping("")
     public ResponseEntity<Map<String, Long>> getAllHouses(@RequestParam("uploadLines") int uploadLines) throws IOException {

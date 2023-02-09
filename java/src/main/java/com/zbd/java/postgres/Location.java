@@ -19,6 +19,7 @@ public class Location {
     private Long id;
     private String locCity;
     private String locDistrict;
+    @Column(columnDefinition = "TEXT")
     private String locFull;
     private String locNeigh;
     private String locStreet;
