@@ -1,0 +1,1 @@
+If Python doesn't add houses.json, you have to add it manually.
