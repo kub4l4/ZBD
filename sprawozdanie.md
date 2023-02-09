@@ -195,13 +195,77 @@ Rysunek 3. Schemat modułów projektu
 
 Celem modułu przygotowanego w języku Python jest przygotowanie pliku JSON (JavaScript Object Notation), za pomocą którego będzie uzupełniana baza danych. Pliki CSV zawierające dane o ofertach mieszkań z różnych regionów Hiszpani zostały połączone w jedną tabele, a następnie zostało przeprowadzone rzutowane danych na prawidłowe typy (rys. 4).
 
-![Obraz zawierający tekst Opis wygenerowany automatycznie](media/30499771fb550a71c48117bfe1dda526.png)
+```Python
+def prepare_prod_csv():
+    joined_files = os.path.join("data", "*.csv")
+    joined_list = glob.glob(joined_files)
+    df = pd.concat(map(pd.read_csv, joined_list), ignore_index=True)
+    # get_information(df)
+    df = df.drop(df[df.balcony == "balcony"].index)
+
+    df['price'] = df['price'].fillna(0).astype(int)
+    df['m2_real'] = df['m2_real'].fillna(0).astype(float).astype(int)
+    df['m2_useful'] = df['m2_useful'].fillna(0).astype(float).astype(int)
+    df['air_conditioner'] = df['air_conditioner'].fillna(0).astype(int)
+    df['balcony'] = df['balcony'].fillna(0).astype(int)
+    df['built_in_wardrobe'] = df['built_in_wardrobe'].fillna(0).astype(int)
+    df['chimney'] = df['chimney'].fillna(0).astype(int)
+    df['garden'] = df['garden'].fillna(0).astype(int)
+    df['ground_size'] = df['ground_size'].fillna(0).astype(int)
+    df['construct_date'] = df['construct_date'].fillna(0).astype(float).astype(int)
+    df['storage_room'] = df['storage_room'].fillna(0).astype(int)
+    df['storage_room'] = df['storage_room'].fillna(0).astype(int)
+    df['terrace'] = df['terrace'].fillna(0).astype(int)
+    df['kitchen'] = df['kitchen'].fillna(0).astype(float).astype(int)
+    df['lift'] = df['lift'].fillna(0).astype(float).astype(int)
+    df['swimming_pool'] = df['swimming_pool'].fillna(0).astype(int)
+    df.to_csv(r'temp.csv')
+```
 
 Rysunek 4 Fragment funkcji pobierającej pliki CSV.
 
 Kolejnym etapem było utworzenie pliku JSON, który będzie zawierać odpowiednie zagnieżdżenia, które pozwolą utworzyć relacje w relacyjnej bazie danych (rys. 5).
 
-![](media/3c3430e6f3758263efd07e8682929ca2.png)
+```Python
+def create_nesting():
+    output = []
+    with open('temp.csv', "r", encoding="utf-8") as csv_file:
+        for ad in csv.DictReader(csv_file):
+            house_information = {
+                'houseType': ad['house_type'],
+                #more code
+                'obtentionDate': ad['obtention_date'],
+            }
+            facilities = {
+                'airConditioner': ad['air_conditioner'],
+                'heating': ad['heating'],
+                'unfurnished': ad['unfurnished'],
+            }
+            location = {
+                'locCity': ad['loc_city'],
+                #more code
+                'locZone': ad['loc_zone'],
+            }
+            quantity = {
+                'm2Real': ad['m2_real'],
+                'm2Useful': ad['m2_useful'],
+            }
+
+            output.append({
+                'adDescription': ad['ad_description'],
+                'adLastUpdate': ad['ad_last_update'],
+                'houseId': ad['house_id'],
+                'price': ad['price'],
+                'houseInformation': house_information,
+                'facilities': facilities,
+                'location': location,
+                'quantity': quantity
+            })
+
+        output_json = json.dumps(output)
+    with open('temp.json', 'w') as outfile:
+        outfile.write(output_json)
+```
 
 Rysunek 5. Fragment funkcji pobierającej pliki CSV
 
@@ -229,7 +293,25 @@ Drugim kontrolerem jest HouseControllerMeasure. Zawiera on wszystkie endpointy (
 
 Rysunek 8. Endpointy w kontrolerze HouseControllerMeasure
 
-![](media/0f51bd79f4cd26f8c2b14d5992b39bd6.png)
+```Java
+@GetMapping("/city")
+public ResponseEntity<Map<String, Long>> getHousesByCity(@RequestParam("city") String city, @RequestParam("uploadLines") int uploadLines) throws IOException {
+	prepareDatabase(uploadLines);
+	HashMap<String, Long> map = new HashMap<>();
+	startTime = System.currentTimeMillis();
+	houseService.getHousesByCityMongo(city);
+	endTime = System.currentTimeMillis();
+	map.put("mongo", endTime - startTime);
+
+	startTime = System.currentTimeMillis();
+	houseService.getHousesByCity(city);
+	endTime = System.currentTimeMillis();
+	map.put("postgres", endTime - startTime);
+
+	cleanDatabase();
+	return ResponseEntity.ok().body(map);
+}
+```
 
 Rysunek 9. Przykładowa funkcja klasy HouseControllerMeasure
 
@@ -245,23 +327,84 @@ Aplikacja zawiera trzy grupy radio butonów do wyboru nazwy i rodzaju zapytania 
 
 Aplikacja komunikuje się z wykorzystaniem napisanego klienta HTTP z logiką biznesową, oczekując asynchronicznie na odpowiedź dzięki wykorzystaniu biblioteki RXJS (fot. 11).
 
-![Obraz zawierający tekst Opis wygenerowany automatycznie](media/aa59f9edb2ed7692125a2947cb3bcfe3.png)
+```TypeScript
+export class Endpoints extends ApiConnector {
+    public readonly getSimple = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}?uploadLines=${quantity}`;
+        return this.get<ExecutionTimeDto>(uri);
+    };
+    public readonly getCondition = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/city?uploadLines=${quantity}&city=Toro`;
+        return this.get<ExecutionTimeDto>(uri);
+    };
+    public readonly getAvgConditioned = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/avg-price-by-city?uploadLines=${quantity}`;
+        return this.get<ExecutionTimeDto>(uri);
+    };
+    public readonly getConditionedOrdered = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/cityAndSort?uploadLines=${quantity}&city=Toro`;
+        return this.get<ExecutionTimeDto>(uri);
+    };
+    public readonly updateSimple = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/updateAdDescription?uploadLines=${quantity}`;
+        return this.put<ExecutionTimeDto>(uri);
+    };
+    public readonly updateCondition = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/updateAdDescriptionCity?uploadLines=${quantity}&city=Toro`;
+        return this.put<ExecutionTimeDto>(uri);
+    };
+    public readonly addSimple = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/upload?uploadLines=${quantity}`;
+        return this.post<ExecutionTimeDto>(uri);
+    };
+    public readonly deleteSimple = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/lines?uploadLines=${quantity}&deleteLines=${quantity}`;
+        return this.delete<ExecutionTimeDto>(uri);
+    };
+    public readonly deleteCondition = (quantity: number): Observable<ExecutionTimeDto> => {
+        const uri = `${this.url}/city?uploadLines=${quantity}&city=Toro`;
+        return this.delete<ExecutionTimeDto>(uri);
+    };
+}
+```
 
 Rysunek 11. Lista połączonych endpointów dla testowych parametrów zapytań oraz zmiennej ilości rekordów
 
 Interfejs został zbudowany modułowo w oparciu o architekturę Reacta, aby dynamicznie aktualizować dane, kiedy tylko użytkownik tego zażąda (fot. 12).
 
-![Obraz zawierający tekst Opis wygenerowany automatycznie](media/af07ba8565c0192d97ab889c46fcba0f.png)
+```HTML
+        <MuiThemeProvider theme={theme}>
+            <div className='application'>
+                <header className='header'>
+                    <h1 className='title'>Projekt ZTBD - Kamil Kubala, Maciej Spólnik</h1>
+                </header>
+                <div className='container card'>
+                    <div className='radios'>
+                        <RadioConfigGroup value={operationName} setValue={setOperationName} radioType={RadioType.OPERATION} />
+                        <RadioConfigGroup value={operationType} setValue={setOperationType} operationName={Number(operationName)} radioType={RadioType.TYPE} />
+                        <RadioConfigGroup value={operationQuantity} setValue={setOperationQuantity} radioType={RadioType.QUANTITY} />
+                    </div>
+                    <MaterialButton loading={loading} onPress={buttonAction} />
+                    <h2 className='result'>Wynik</h2>
+                    <div className='result-cards'>
+                        <ResultCard title='PostgreSQL' value={relationalTime} />
+                        <div className='result-separator' />
+                        <ResultCard title='MongoDB' value={nonRelationalTime} />
+                    </div>
+                </div>
+            </div>
+        </MuiThemeProvider>
+```
 
 Rysunek 12.Komponent App.tsx budujący główny ekran aplikacji
 
 ## Relacyjna baza danych
 
-![](media/d93ecdcc4e2f8e25c4059529ff9f98ac.png)Relacyjna Baza danych składa się z 5 powiązanych tabel: Houses, location, facilities, houses information, quantity (fot. 13).
+![](media/d93ecdcc4e2f8e25c4059529ff9f98ac.png)Relacyjna Baza danych składa się z 5 powiązanych tabel: `houses, location, facilities, houses_information, quantity` (fot. 13).
 
 ## Nierelacyjna baza danych
 
-Nierelacyjna baza danych składa się z 8 elementów, z czego 4 są to zagnieżdżone elementy w których znajdują się kolejne elementy: location, facilities, houses information, quantity (fot. 14).
+Nierelacyjna baza danych składa się z 8 elementów, z czego 4 są to zagnieżdżone elementy w których znajdują się kolejne elementy: `location, facilities, houses_information, quantity` (fot. 14).
 
 ![](media/3af3a98af659747671fe6e9fc7401a2e.png)
 
@@ -280,16 +423,16 @@ Przygotowane zostały operacje pobierania danych z bazy. Zostały podzielone na 
 
 Poniżej przedstawiono tabelę pomiarów powyższych typów zapytań dla próby 100, 1000, 5000 i 15000 rekordów:
 
-| **GET (ms)**    |                    |                     |                |                |             |                |             |                |
-|-----------------|--------------------|---------------------|----------------|----------------|-------------|----------------|-------------|----------------|
-| **zapytanie**   | **Brak kryteriów** | **Prosta Selekcja** | **Sortowanie** | **Grupowanie** |             |                |             |                |
-| **baza danych** | **mongoDB**        | **postgreSQL**      | **mongoDB**    | **postgreSQL** | **mongoDB** | **postgreSQL** | **mongoDB** | **postgreSQL** |
-| **100**         | 20                 | 6                   | 13             | 2              | 19          | 3              | 6           | 2              |
-| **1000**        | 33                 | 5                   | 35             | 4              | 29          | 5              | 15          | 4              |
-| **5000**        | 38                 | 6                   | 34             | 4              | 35          | 8              | 18          | 4              |
-| **15000**       | 49                 | 11                  | 37             | 10             | 56          | 12             | 39          | 16             |
-| **30000**       | 66                 | 24                  | 70             | 15             | 69          | 23             | 99          | 29             |
-| **50000**       | 70                 | 50                  | 63             | 22             | 73          | 25             | 136         | 50             |
+| **GET (ms)**    |                    |                    |                     |                     |                |                |                |                |
+|-----------------|--------------------|--------------------|---------------------|---------------------|----------------|----------------|----------------|----------------|
+| **zapytanie**   | **Brak kryteriów** | **Brak kryteriów** | **Prosta Selekcja** | **Prosta Selekcja** | **Sortowanie** | **Sortowanie** | **Grupowanie** | **Grupowanie** |
+| **baza danych** | **mongoDB**        | **postgreSQL**     | **mongoDB**         | **postgreSQL**      | **mongoDB**    | **postgreSQL** | **mongoDB**    | **postgreSQL** |
+| **100**         | 20                 | 6                  | 13                  | 2                   | 19             | 3              | 6              | 2              |
+| **1000**        | 33                 | 5                  | 35                  | 4                   | 29             | 5              | 15             | 4              |
+| **5000**        | 38                 | 6                  | 34                  | 4                   | 35             | 8              | 18             | 4              |
+| **15000**       | 49                 | 11                 | 37                  | 10                  | 56             | 12             | 39             | 16             |
+| **30000**       | 66                 | 24                 | 70                  | 15                  | 69             | 23             | 99             | 29             |
+| **50000**       | 70                 | 50                 | 63                  | 22                  | 73             | 25             | 136            | 50             |
 
 Powyższe dane zestawiono na wykresach (stosunek ilości rekordów do czasu wykonania w ms):
 
@@ -322,14 +465,14 @@ Przygotowane zostały operacje zmiany części danych w istniejących rekordach 
 
 Poniżej tabela pomiarów tej operacji dla próby 100, 1000, 5000 i 10000 rekordów:
 
-| **PUT**         |                    |                     |             |                |
-|-----------------|--------------------|---------------------|-------------|----------------|
-| **zapytanie**   | **Brak kryteriów** | **Prosta Selekcja** |             |                |
-| **baza danych** | **mongoDB**        | **postgreSQL**      | **mongoDB** | **postgreSQL** |
-| **100**         | 141                | 563                 | 119         | 418            |
-| **1000**        | 1108               | 29066               | 154         | 3509           |
-| **5000**        | 5735               | 614274              | 195         | 15550          |
-| **10000**       | 12258              | 2575689             | 162         | 45065          |
+| **GET (ms)**    |                    |                    |                     |                     |
+|-----------------|--------------------|--------------------|---------------------|---------------------|
+| **zapytanie**   | **Brak kryteriów** | **Brak kryteriów** | **Prosta Selekcja** | **Prosta Selekcja** |
+| **baza danych** | **mongoDB**        | **postgreSQL**     | **mongoDB**         | **postgreSQL**      |
+| **100**         | 141                | 563                | 119                 | 418                 |
+| **1000**        | 1108               | 29066              | 154                 | 3509                |
+| **5000**        | 5735               | 614274             | 195                 | 15550               |
+| **10000**       | 12258              | 2575689            | 162                 | 45065               |
 
 Powyższe dane zestawiono na wykresach (stosunek ilości rekordów do czasu wykonania w ms):
 
@@ -348,14 +491,14 @@ Przygotowane zostały operacje usunięcia rekordów bazy danych. Zostały podzie
 
 Poniżej tabela pomiarów tej operacji dla próby 100, 1000, 5000 i 10000 rekordów:
 
-| **DELETE**      |                    |                     |             |                |
-|-----------------|--------------------|---------------------|-------------|----------------|
-| **zapytanie**   | **Brak kryteriów** | **Prosta Selekcja** |             |                |
-| **baza danych** | **mongoDB**        | **postgreSQL**      | **mongoDB** | **postgreSQL** |
-| **100**         | 104                | 724                 | 95          | 275            |
-| **1000**        | 945                | 19920               | 142         | 700            |
-| **5000**        | 6536               | 410636              | 145         | 1161           |
-| **10000**       | 9821               | 1442167             | 178         | 1701           |
+| **GET (ms)**    |                    |                    |                     |                     |
+|-----------------|--------------------|--------------------|---------------------|---------------------|
+| **zapytanie**   | **Brak kryteriów** | **Brak kryteriów** | **Prosta Selekcja** | **Prosta Selekcja** |
+| **baza danych** | **mongoDB**        | **postgreSQL**     | **mongoDB**         | **postgreSQL**      |
+| **100**         | 104                | 724                | 95                  | 275                 |
+| **1000**        | 945                | 19920              | 142                 | 700                 |
+| **5000**        | 6536               | 410636             | 145                 | 1161                |
+| **10000**       | 9821               | 1442167            | 178                 | 1701                |
 
 Powyższe dane zestawiono na wykresach (stosunek ilości rekordów do czasu wykonania w ms):
 
