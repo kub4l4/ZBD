@@ -5,10 +5,12 @@ services:
     ports:
       - "27017:27017"
     volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ./mongodb:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: HouseMongo
   postgres:
     image: postgres
     ports:
@@ -18,4 +20,4 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SW#@$%RtfdsE$%^78yuGTFR%^789uIU
-      POSTGRES_DB: database
+      POSTGRES_DB: ZBD-PostgreSQL

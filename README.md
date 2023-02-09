@@ -1,16 +1,6 @@
+How to run project:
 
-1) Run python project to create houses.json
-
-2) Create mongoDB user:
-```
-use HomeMongo
-db.createUser({
-  user: "kamil1",
-  pwd: "Qwerty123!",
-  roles: [
-    { role: 'root', db: 'admin' },
-    { role: "readWrite", db: "test" }
-  ]
-});
-```
-3) Update path in HomeService getJSON() (Java)
+1) Run Python module to create houses.json in Java module
+2) Run docker-compose-file
+3) Run java module
+4) Run react module

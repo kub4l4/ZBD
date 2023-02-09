@@ -6,23 +6,23 @@ import os
 import pandas as pd
 
 
-def prepare_test_csv():
-	df = pd.read_csv(r'archive\(15).csv')
-	df.to_csv(r'temp.csv')
-
-
 def longest_string(column):
 	column = column.astype(str)
 	return column.str.len().max()
 
 
+def get_information(df):
+	print(df.apply(longest_string))
+	print(df.info())
+	print(df.head(5))
+
+
 def prepare_prod_csv():
-	joined_files = os.path.join("archive", "*.csv")
+	joined_files = os.path.join("data", "*.csv")
 	joined_list = glob.glob(joined_files)
 	df = pd.concat(map(pd.read_csv, joined_list), ignore_index=True)
+	# get_information(df)
 	df = df.drop(df[df.balcony == "balcony"].index)
-	longest_strings = df.apply(longest_string)
-	print(longest_strings)
 
 	df['price'] = df['price'].fillna(0).astype(int)
 	df['m2_real'] = df['m2_real'].fillna(0).astype(float).astype(int)
@@ -40,8 +40,6 @@ def prepare_prod_csv():
 	df['kitchen'] = df['kitchen'].fillna(0).astype(float).astype(int)
 	df['lift'] = df['lift'].fillna(0).astype(float).astype(int)
 	df['swimming_pool'] = df['swimming_pool'].fillna(0).astype(int)
-
-
 	df.to_csv(r'temp.csv')
 
 
@@ -106,13 +104,21 @@ def create_nesting():
 		outfile.write(output_json)
 
 
-def test():
+def save_json():
+	file_path = os.path.join(os.path.dirname(os.getcwd()), "java\\assets\\houses.json")
 	df = pd.read_json('temp.json')
-	df.to_json(r'houses.json', orient='records', lines=True)
+	df.to_json(file_path, orient='records', lines=True)
+
+
+def clean():
+	if os.path.exists('temp.json'):
+		os.remove('temp.json')
+	if os.path.exists('temp.csv'):
+		os.remove('temp.csv')
 
 
 if __name__ == '__main__':
-	# prepare_test_csv()
 	prepare_prod_csv()
 	create_nesting()
-	test()
+	save_json()
+	clean()

@@ -40,3 +40,4 @@ build/
 /mongodb/
 /react/node_modules/
 /react/package-lock.json
+/java/assets/houses.json
